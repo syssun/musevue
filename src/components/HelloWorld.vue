@@ -1,56 +1,78 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
-  </div>
+	<div class="hello">
+		<mu-container>
+		  <mu-button class="demo-button" color="primary" @click="alert()">Alert</mu-button>
+		  <mu-button class="demo-button" color="secondary" @click="confirm()">Confirm</mu-button>
+		  <mu-button class="demo-button" color="teal" @click="prompt()">Prompt</mu-button>
+		</mu-container>
+	</div>
 </template>
 
 <script>
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
+  methods: {
+    alert () {
+      this.$alert('Hello World', '提示', {
+        okLabel: '知道了'
+      }).then(() => {
+        this.$toast.message('提示信息');
+      });
+    },
+    confirm () {
+      this.$confirm('确定要删除？', '提示', {
+        type: 'warning'
+      }).then(({ result }) => {
+		  console.log(result);
+        if (result) {
+          this.$toast.message('点击了确定');
+        } else {
+          this.$toast.message('点击了取消');
+        }
+      });
+    },
+    prompt () {
+      this.$prompt('请输入邮箱', '提示', {
+        validator (value) {
+          return {
+            valid: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/.test(value),
+            message: '请输入正确邮箱格式'
+          }
+        }
+      }).then(({ result, value }) => {
+		  console.log(result);
+        if (result) {
+          this.$toast.message('你输入的邮箱：' + value);
+        } else {
+          this.$toast.message('点击了取消');
+        }
+      });
+    }
   }
-}
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+	h3 {
+		margin: 40px 0 0;
+	}
+
+	ul {
+		list-style-type: none;
+		padding: 0;
+	}
+
+	li {
+		display: inline-block;
+		margin: 0 10px;
+	}
+
+	a {
+		color: #42b983;
+	}
+
+	.demo-list-wrap {
+		width: 100%;
+		max-width: 360px;
+	}
 </style>
